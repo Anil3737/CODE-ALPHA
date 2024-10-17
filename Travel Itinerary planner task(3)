@@ -1,0 +1,95 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Scanner;
+public class TravelPlanner {
+    static class Destination {
+        private String name;
+        private LocalDate startDate;
+        private LocalDate endDate;
+        private double budget;
+        public Destination(String name, LocalDate startDate, LocalDate endDate, double budget) {
+            this.name = name;
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.budget = budget;
+        }
+        public String getName() {
+            return name;
+        }
+
+        public LocalDate getStartDate() {
+            return startDate;
+        }
+
+        public LocalDate getEndDate() {
+            return endDate;
+        }
+
+        public double getBudget() {
+            return budget;
+        }
+
+        @Override
+        public String toString() {
+            return "Destination: " + name + "\nStart Date: " + startDate + "\nEnd Date: " + endDate + "\nBudget: $" + budget;
+        }
+    }
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<Destination> itinerary = new ArrayList<>();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        boolean running = true;
+        while (running) {
+            System.out.println("\nWelcome to the Travel Itinerary Planner!");
+            System.out.println("1. Add a new destination");
+            System.out.println("2. Show itinerary");
+            System.out.println("3. Calculate total budget");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume the newline character
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter destination name: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Enter start date (yyyy-MM-dd): ");
+                    LocalDate startDate = LocalDate.parse(scanner.nextLine(), dateFormatter);
+
+                    System.out.print("Enter end date (yyyy-MM-dd): ");
+                    LocalDate endDate = LocalDate.parse(scanner.nextLine(), dateFormatter);
+                    System.out.print("Enter budget: ");
+                    double budget = scanner.nextDouble();
+                    itinerary.add(new Destination(name, startDate, endDate, budget));
+                    System.out.println("Destination added successfully!");
+                    break;
+                case 2:
+                    System.out.println("\nTravel Itinerary:");
+                    if (itinerary.isEmpty()) {
+                        System.out.println("No destinations added yet.");
+                    } else {
+                        for (Destination d : itinerary) {
+                            System.out.println(d);
+                            System.out.println("----------------------------");
+                        }
+                    }
+                    break;
+                case 3:
+                    double totalBudget = 0;
+                    for (Destination d : itinerary) {
+                        totalBudget += d.getBudget();
+                    }
+                    System.out.println("Total Budget for the trip: $" + totalBudget);
+                    break;
+                case 4:
+                    running = false;
+                    System.out.println("Exiting Travel Itinerary Planner. Safe travels!");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+            }
+        }
+        scanner.close();
+    }
+}
